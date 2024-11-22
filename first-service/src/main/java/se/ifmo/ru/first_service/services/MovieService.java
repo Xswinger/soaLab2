@@ -1,22 +1,46 @@
 package se.ifmo.ru.first_service.services;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import se.ifmo.ru.first_service.dto.MovieResponseArray;
 import se.ifmo.ru.first_service.models.Movie;
 import se.ifmo.ru.first_service.models.MpaaRating;
 
 public interface MovieService {
-    List<Movie> getMovies();
+    MovieResponseArray getMovies(
+        @PathVariable(required = false) Long id,
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) ZonedDateTime creationDate,
+        @RequestParam(required = false) Integer oscarCount,
+        @RequestParam(required = false) Integer length,
+        @RequestParam(required = false) Integer budget,
+        @RequestParam(required = false) Integer totalBoxOffice,
+        @RequestParam(required = false) MpaaRating mpaaRating,
+        @RequestParam(defaultValue = "0") Integer page,
+        @RequestParam(defaultValue = "10") Integer pageSize,
+        @RequestParam(defaultValue = "id,asc") String[] sort
+    );
 
     Movie getMovie(@PathVariable Integer id);
 
-    List<Movie> getMoviesByOscars(@RequestParam Long oscarsCount);
+    MovieResponseArray getMoviesByOscars(
+        @RequestParam Integer oscarsCount, 
+        @RequestParam(defaultValue = "0") Integer page,
+        @RequestParam(defaultValue = "10") Integer pageSize,
+        @RequestParam(defaultValue = "asc") String sort
+    );
 
-    List<Movie> getMoviesByName(@RequestParam String substr);
+    MovieResponseArray getMoviesByName(
+        @RequestParam String substr, 
+        @RequestParam(defaultValue = "0") Integer page,
+        @RequestParam(defaultValue = "10") Integer pageSize,
+        @RequestParam(defaultValue = "asc") String sort
+    );
 
     Movie addMovie(@RequestBody Movie movie);
 

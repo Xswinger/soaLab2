@@ -1,7 +1,11 @@
 package se.ifmo.ru.second_service.services;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import java.util.List;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.Response;
+import se.ifmo.ru.second_service.models.Movie;
 
 @ApplicationScoped
 public class MovieService {
@@ -9,11 +13,11 @@ public class MovieService {
     @Inject
     private MovieRestClient client;
     
-    public Object addMoviesOscar() {
+    public Response addMoviesOscar() {
         return this.client.addMoviesOscar();
     }
 
-    public Object awardMoviesByOscarsAndDuration(int minLength, long oscarsCount) {
+    public List<Movie> awardMoviesByOscarsAndDuration(int minLength, long oscarsCount) {
         return this.client.awardMoviesByOscarsAndDuration(minLength, oscarsCount);
     }
 

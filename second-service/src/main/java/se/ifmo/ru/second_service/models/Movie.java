@@ -15,6 +15,7 @@ public class Movie {
     private Coordinates coordinates; //Поле не может быть null
     private java.time.ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
     private Integer oscarCount; //Значение поля должно быть больше 0, Поле может быть null
+    private int length;
     private int budget; //Значение поля должно быть больше 0
     private int totalBoxOffice; //Значение поля должно быть больше 0
     private MpaaRating mpaaRating; //Поле не может быть null

@@ -12,7 +12,7 @@ CREATE TABLE location (
 -- Таблица Person
 CREATE TABLE person (
     name VARCHAR NOT NULL, -- Используем как первичный ключ
-    birthday TIMESTAMPTZ NOT NULL,
+    birthday TIMESTAMP WITH TIME ZONE NOT NULL,
     weight BIGINT NOT NULL CHECK (weight > 0),
     location_x BIGINT NOT NULL,
     location_y DOUBLE PRECISION NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE movie (
     name VARCHAR NOT NULL UNIQUE, -- Уникальное и обязательное поле
     coordinates_x DOUBLE PRECISION NOT NULL,
     coordinates_y DOUBLE PRECISION NOT NULL,
-    creation_date TIMESTAMPTZ NOT NULL DEFAULT now(), -- Автоматическая генерация даты
+    creation_date TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), -- Автоматическая генерация даты
     oscar_count INT NOT NULL CHECK (oscar_count > 0),
     length INT NOT NULL CHECK (length > 0),
     budget INT NOT NULL CHECK (budget > 0),

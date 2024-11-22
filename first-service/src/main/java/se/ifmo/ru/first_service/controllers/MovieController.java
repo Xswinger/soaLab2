@@ -1,11 +1,12 @@
 package se.ifmo.ru.first_service.controllers;
 
 
+import java.time.ZonedDateTime;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,8 +37,20 @@ public class MovieController {
 
     @GetMapping
     @WithRateLimitProtection
-    public ResponseEntity<?> getMovies() {
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(this.service.getMovies());
+    public ResponseEntity<?> getMovies(
+        @PathVariable(required = false) Long id,
+        @RequestParam(required = false) String name,
+        @RequestParam(required = false) ZonedDateTime creationDate,
+        @RequestParam(required = false) Integer oscarCount,
+        @RequestParam(required = false) Integer length,
+        @RequestParam(required = false) Integer budget,
+        @RequestParam(required = false) Integer totalBoxOffice,
+        @RequestParam(required = false) MpaaRating mpaaRating,
+        @RequestParam(defaultValue = "0") Integer page,
+        @RequestParam(defaultValue = "10") Integer pageSize,
+        @RequestParam(defaultValue = "id,asc") String[] sort
+    ) {
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(this.service.getMovies(id, name, creationDate, oscarCount, length, budget, totalBoxOffice, mpaaRating, page, pageSize, sort));
     }
 
     @GetMapping("/{id}")
@@ -48,39 +61,49 @@ public class MovieController {
 
     @GetMapping("/oscars")
     @WithRateLimitProtection
-    public ResponseEntity<?> getMoviesByOscars(@RequestParam @Min(value = 0, message = "Invalid input") Long oscarsCount) {
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(this.service.getMoviesByOscars(oscarsCount));
+    public ResponseEntity<?> getMoviesByOscars(
+        @RequestParam @Min(value = 0, message = "Invalid input") Integer oscarsCount,
+        @RequestParam(defaultValue = "0") Integer page,
+        @RequestParam(defaultValue = "10") Integer pageSize,
+        @RequestParam(defaultValue = "asc") String sort
+    ) {
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(this.service.getMoviesByOscars(oscarsCount, page, pageSize, sort));
     }
 
     @GetMapping("/name")
     @WithRateLimitProtection
-    public ResponseEntity<?> getMoviesByName(@RequestParam String substr) {
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(this.service.getMoviesByName(substr));
+    public ResponseEntity<?> getMoviesByName(
+        @RequestParam String substr,
+        @RequestParam(defaultValue = "0") Integer page,
+        @RequestParam(defaultValue = "10") Integer pageSize,
+        @RequestParam(defaultValue = "asc") String sort
+    ) {
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(this.service.getMoviesByName(substr, page, pageSize, sort));
     }
 
     @PostMapping
     @WithRateLimitProtection
     public ResponseEntity<?> addMovie(@RequestBody Movie movie) {
-        try {
+        // try {
             Movie addedMovie = this.service.addMovie(movie);
             return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(addedMovie);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        // } catch (Exception e) {
+        //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        // }
         
     }
 
     @PutMapping("/{id}")
     @WithRateLimitProtection
     public ResponseEntity<?> updateMovie(@PathVariable Integer id, @RequestBody Movie movie) {
-        try {
+        // try {
             Movie updatedMovie = this.service.updateMovie(id, movie);
             return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(updatedMovie);
-        } catch (Exception e) {
-            return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .build();
-        }
+        // } catch (Exception e) {
+        //     return ResponseEntity
+        //         .status(HttpStatus.NOT_FOUND)
+        //         .build();
+        // }
     }
 
     @DeleteMapping("/{id}")

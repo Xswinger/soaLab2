@@ -1,8 +1,11 @@
 package se.ifmo.ru.first_service.models;
 
 
+import java.time.ZonedDateTime;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -17,6 +20,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import se.ifmo.ru.first_service.utils.ZonedDateTimeConverter;
 
 
 @Getter
@@ -38,9 +42,8 @@ public class Movie {
     private Coordinates coordinates; //Поле не может быть null
 
     @Column(name = "creation_date", nullable = false)
-    //@Convert(converter = ZonedDateTimeStringConverter.class)
-    //! Temp string
-    private String creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
+    @Convert(converter = ZonedDateTimeConverter.class)
+    private ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
 
     @Column(name = "oscar_count", nullable = true)
     private Integer oscarCount; //Значение поля должно быть больше 0, Поле может быть null

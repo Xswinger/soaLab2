@@ -1,30 +1,30 @@
 package se.ifmo.ru.first_service.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import se.ifmo.ru.first_service.models.Movie;
 import se.ifmo.ru.first_service.models.MpaaRating;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Repository
-public interface MovieRepository extends CrudRepository<Movie, Long>  {
+public interface MovieRepository extends JpaRepository<Movie, Long>  {
 
-    @Query("SELECT m FROM Movie m")
-    List<Movie> getMovies();
+    Page<Movie> findByIdOrNameOrCreationDateOrOscarCountOrLengthOrBudgetOrTotalBoxOfficeOrMpaaRating(Long id, String name, ZonedDateTime creationDate, Integer oscarCount, int length, int budget, int totalBoxOffice, MpaaRating mpaaRating, Pageable pageable);
+
+    Page<Movie> findByOscarCount(Integer oscarCount, Pageable pageable);
+
+    Page<Movie> findByName(String substr, Pageable pageable);
 
     @Query("SELECT m FROM Movie m WHERE m.id = :id")
     Movie getMovieById(Integer id);
-
-    @Query("SELECT m FROM Movie m WHERE m.oscarCount < :count")
-    List<Movie> getMoviesByOscarsCount(Long count);
-
-    @Query("SELECT m FROM Movie m WHERE m.name LIKE :substr")
-    List<Movie> getMoviesByName(String substr);
 
     @Modifying
     @Transactional
