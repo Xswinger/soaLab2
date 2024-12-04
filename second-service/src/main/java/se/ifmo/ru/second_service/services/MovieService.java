@@ -17,7 +17,7 @@ public class MovieService {
         return this.client.addMoviesOscar();
     }
 
-    public List<Movie> awardMoviesByOscarsAndDuration(int minLength, long oscarsCount) {
+    public Response awardMoviesByOscarsAndDuration(int minLength, long oscarsCount) {
         return this.client.awardMoviesByOscarsAndDuration(minLength, oscarsCount);
     }
 

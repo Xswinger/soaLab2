@@ -29,12 +29,12 @@ public interface MovieRepository extends JpaRepository<Movie, Long>  {
     @Modifying
     @Transactional
     @Query("DELETE FROM Movie m WHERE m.id = :id")
-    int deleteMovieById(Integer id);
+    void deleteMovieById(Integer id);
 
     @Modifying
     @Transactional
     @Query("DELETE FROM Movie m WHERE m.mpaaRating = :rating")
-    int deleteMovieByRating(MpaaRating rating);
+    void deleteMovieByRating(MpaaRating rating);
 
     @Modifying
     @Transactional
@@ -47,5 +47,5 @@ public interface MovieRepository extends JpaRepository<Movie, Long>  {
     @Modifying
     @Transactional
     @Query("UPDATE Movie m SET m.oscarCount = m.oscarCount + 1 WHERE m.mpaaRating = 'R'")
-    int awardMoviesByRating();
+    void awardMoviesByRating();
 }

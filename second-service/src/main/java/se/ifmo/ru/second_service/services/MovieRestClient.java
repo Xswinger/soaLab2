@@ -6,6 +6,7 @@ import java.security.KeyStore;
 import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManagerFactory;
@@ -24,6 +25,7 @@ public class MovieRestClient {
     
     private Client client;
     private final String serviceUrl = "https://localhost:8080/first-service-0.0.1-SNAPSHOT";
+    // private final String serviceUrlTest = "https://localhost:41147";
 
     public Response addMoviesOscar() {
         String url = serviceUrl + "/movies/reward-r";
@@ -42,7 +44,7 @@ public class MovieRestClient {
         }
     }
 
-    public List<Movie> awardMoviesByOscarsAndDuration(int minLength, long oscarsCount) {
+    public Response awardMoviesByOscarsAndDuration(int minLength, long oscarsCount) {
         String url = serviceUrl + "/movies/honor-by-length/" + minLength + "/oscars-to-add";
         try {
             client = createClientWithTrustStore();
@@ -51,7 +53,7 @@ public class MovieRestClient {
 
             client.close();
 
-            return response.readEntity(new GenericType<List<Movie>>() {});
+            return response;
         } catch(Exception ex) {
             System.out.println(ex.getMessage());
             return null;
@@ -59,42 +61,30 @@ public class MovieRestClient {
     }
 
     private static Client createClientWithTrustStore() {
+        String keystorePath = "keystore.p12";
+        String keystorePassword = "password";
+
         try {
-        System.out.println("Загрузка truststore...");
-        InputStream trustStoreStream = MovieRestClient.class
-                .getClassLoader()
-                .getResourceAsStream("truststore.jks");
+            KeyStore keyStore = KeyStore.getInstance("PKCS12");
 
-        if (trustStoreStream == null) {
-            throw new RuntimeException("Файл truststore.jks не найден в classpath");
+            InputStream keyStoreFileInputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(keystorePath);
+            keyStore.load(keyStoreFileInputStream, keystorePassword.toCharArray());
+            
+            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            trustManagerFactory.init(keyStore);
+
+            KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+            keyManagerFactory.init(keyStore, keystorePassword.toCharArray());
+
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null);
+
+            return ClientBuilder.newBuilder()
+                    .sslContext(sslContext)
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Ошибка настройки SSL клиента", e);
         }
-
-        KeyStore truststore = KeyStore.getInstance("JKS");
-        truststore.load(trustStoreStream, "password".toCharArray());
-        System.out.println("Truststore успешно загружен!");
-
-        TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-        trustManagerFactory.init(truststore);
-        System.out.println("TrustManager настроен!");
-
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
-        System.out.println("SSLContext успешно настроен!");
-
-        HostnameVerifier hostnameVerifier = new HostnameVerifier() {
-                @Override
-                public boolean verify(String hostname, SSLSession session) {
-                    return true; // Игнорирует проверку имени
-                }
-            };
-
-        return ClientBuilder.newBuilder()
-                .sslContext(sslContext)
-                .hostnameVerifier(hostnameVerifier)
-                .build();
-    } catch (Exception e) {
-        e.printStackTrace();
-        throw new RuntimeException("Ошибка настройки SSL клиента", e);
-    }
     }
 }

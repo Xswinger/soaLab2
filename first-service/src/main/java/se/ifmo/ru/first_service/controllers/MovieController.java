@@ -84,67 +84,36 @@ public class MovieController {
     @PostMapping
     @WithRateLimitProtection
     public ResponseEntity<?> addMovie(@RequestBody Movie movie) {
-        // try {
-            Movie addedMovie = this.service.addMovie(movie);
-            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(addedMovie);
-        // } catch (Exception e) {
-        //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        // }
+        Movie addedMovie = this.service.addMovie(movie);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(addedMovie);
         
     }
 
     @PutMapping("/{id}")
     @WithRateLimitProtection
     public ResponseEntity<?> updateMovie(@PathVariable Integer id, @RequestBody Movie movie) {
-        // try {
-            Movie updatedMovie = this.service.updateMovie(id, movie);
-            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(updatedMovie);
-        // } catch (Exception e) {
-        //     return ResponseEntity
-        //         .status(HttpStatus.NOT_FOUND)
-        //         .build();
-        // }
+        Movie updatedMovie = this.service.updateMovie(id, movie);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(updatedMovie);
     }
 
     @DeleteMapping("/{id}")
     @WithRateLimitProtection
     public ResponseEntity<?> deleteMovie(@PathVariable Integer id) {
-        //TODO strange logic, change in future
-        // try {
-            boolean isMovieDelete = this.service.deleteMovie(id);
-            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(isMovieDelete);
-        // } catch (Exception e) {
-        //     Response response = new Response();
-        //     response.setStatusCode("404");
-        //     response.setStatusMsg("Movie not found");
-        //     return ResponseEntity
-        //         .status(HttpStatus.NOT_FOUND)
-        //         .contentType(MediaType.APPLICATION_JSON)
-        //         .body(response);
-        // }
+        this.service.deleteMovie(id);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).build();
     }
 
     @DeleteMapping("/rating")
     @WithRateLimitProtection
     public ResponseEntity<?> deleteMovieByRating(@RequestParam MpaaRating mpaaRating) {
-        //TODO strange logic, change in future
-        // try {
-            boolean isMovieDelete = this.service.deleteMovieByRating(mpaaRating);
-            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(isMovieDelete);
-        // } catch (Exception e) {
-        //     Response response = new Response();
-        //     response.setStatusCode("404");
-        //     response.setStatusMsg("Movie not found");
-        //     return ResponseEntity
-        //         .status(HttpStatus.NOT_FOUND)
-        //         .contentType(MediaType.APPLICATION_JSON)
-        //         .body(response);
-        // }
+        this.service.deleteMovieByRating(mpaaRating);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).build();
     }
 
     @GetMapping("/reward-r")
     public ResponseEntity<?> addMoviesOscar() {
-        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(this.service.awardMoviesByRating());
+        this.service.awardMoviesByRating();
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).build();
     }
 
     @PostMapping("/honor-by-length/{min-length}/oscars-to-add")

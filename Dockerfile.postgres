@@ -1,0 +1,3 @@
+FROM postgres:12
+COPY first-service/src/main/resources/sql/table.sql /docker-entrypoint-initdb.d/test.sql
+EXPOSE 54323

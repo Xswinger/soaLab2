@@ -2,7 +2,6 @@ package se.ifmo.ru.first_service.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,12 +13,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Location {
-    @Column(name = "location_x")
+    @Column(name = "x")
     private long x;
 
-    @Column(name = "location_y")
+    @Column(name = "y")
     private double y;
 
-    @Column(name = "location_z")
+    @Column(name = "z")
     private float z;
 }

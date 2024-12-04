@@ -15,19 +15,31 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import jakarta.transaction.Transactional;
 import se.ifmo.ru.first_service.dto.MovieResponseArray;
 import se.ifmo.ru.first_service.models.Movie;
 import se.ifmo.ru.first_service.models.MpaaRating;
+// import se.ifmo.ru.first_service.repositories.CoordinatesRepository;
+// import se.ifmo.ru.first_service.repositories.LocationRepository;
 import se.ifmo.ru.first_service.repositories.MovieRepository;
 
 @Service
 public class MovieServiceImpl implements MovieService {
 
-    private final MovieRepository repository;
+    private final MovieRepository movieRepository;
+    // private final LocationRepository locationRepository;
+    // private final CoordinatesRepository coordinatesRepository;
+
+    // @Autowired
+    // public MovieServiceImpl(MovieRepository movieRepository, LocationRepository locationRepository, CoordinatesRepository coordinatesRepository) {
+    //     this.movieRepository = movieRepository;
+    //     this.locationRepository = locationRepository;
+    //     this.coordinatesRepository = coordinatesRepository;
+    // }
 
     @Autowired
-    public MovieServiceImpl(MovieRepository repository) {
-        this.repository = repository;
+    public MovieServiceImpl(MovieRepository movieRepository) {
+        this.movieRepository = movieRepository;
     }
 
     public MovieResponseArray getMovies(
@@ -59,9 +71,9 @@ public class MovieServiceImpl implements MovieService {
         Page<Movie> moviePages;
 
         if (id != null || name != null || oscarCount != null || length != null || budget != null || totalBoxOffice != null || mpaaRating != null)
-            moviePages = repository.findByIdOrNameOrCreationDateOrOscarCountOrLengthOrBudgetOrTotalBoxOfficeOrMpaaRating(id, name, creationDate, oscarCount, length, budget, totalBoxOffice, mpaaRating, pagingSort);
+            moviePages = movieRepository.findByIdOrNameOrCreationDateOrOscarCountOrLengthOrBudgetOrTotalBoxOfficeOrMpaaRating(id, name, creationDate, oscarCount, length, budget, totalBoxOffice, mpaaRating, pagingSort);
         else
-            moviePages = repository.findAll(pagingSort);
+            moviePages = movieRepository.findAll(pagingSort);
 
         movies = moviePages.getContent();
 
@@ -74,7 +86,7 @@ public class MovieServiceImpl implements MovieService {
     }
 
     public Movie getMovie(@PathVariable Integer id) {
-        Movie movie = this.repository.getMovieById(id);
+        Movie movie = this.movieRepository.getMovieById(id);
         return movie;
     }
 
@@ -92,7 +104,7 @@ public class MovieServiceImpl implements MovieService {
         Pageable pagingSort = PageRequest.of(page, pageSize, Sort.by(orders));
         Page<Movie> moviePages;
 
-        moviePages = repository.findByOscarCount(oscarsCount, pagingSort);
+        moviePages = movieRepository.findByOscarCount(oscarsCount, pagingSort);
 
         movies = moviePages.getContent();
 
@@ -118,7 +130,7 @@ public class MovieServiceImpl implements MovieService {
         Pageable pagingSort = PageRequest.of(page, pageSize, Sort.by(orders));
         Page<Movie> moviePages;
 
-        moviePages = this.repository.findByName(substr, pagingSort);
+        moviePages = this.movieRepository.findByName(substr, pagingSort);
         movies = moviePages.getContent();
 
         MovieResponseArray response = new MovieResponseArray();
@@ -129,29 +141,35 @@ public class MovieServiceImpl implements MovieService {
         return response;
     }
 
+    // @Transactional
     public Movie addMovie(@RequestBody Movie movie) {
-        return this.repository.save(movie);
+        // this.coordinatesRepository.save(movie.getCoordinates());
+        // this.locationRepository.save(movie.getDirector().getLocation());
+        return this.movieRepository.save(movie);
     }
 
+    // @Transactional
     public Movie updateMovie(@PathVariable Integer id, @RequestBody Movie movie) {
-        return this.repository.save(movie);
+        // this.coordinatesRepository.save(movie.getCoordinates());
+        // this.locationRepository.save(movie.getDirector().getLocation());
+        return this.movieRepository.save(movie);
     }
 
-    public boolean deleteMovie(@PathVariable Integer id) {
-        return this.repository.deleteMovieById(id) == 1 ? true : false;
+    public void deleteMovie(@PathVariable Integer id) {
+        this.movieRepository.deleteMovieById(id);
     }
 
-    public boolean deleteMovieByRating(@RequestParam MpaaRating mpaaRating) {
-        return this.repository.deleteMovieByRating(mpaaRating) > 0 ? true : false;
+    public void deleteMovieByRating(@RequestParam MpaaRating mpaaRating) {
+        this.movieRepository.deleteMovieByRating(mpaaRating);
     }
 
     public List<Movie> awardMoviesByOscarsAndDuration(@PathVariable int minLength, @RequestParam long oscarsCount) {
-        this.repository.awardMoviesByOscarsAndDuration(minLength, oscarsCount);
+        this.movieRepository.awardMoviesByOscarsAndDuration(minLength, oscarsCount);
 
-        return this.repository.getMoviesWithLengthGreaterThan(minLength);
+        return this.movieRepository.getMoviesWithLengthGreaterThan(minLength);
     }
 
-    public boolean awardMoviesByRating() {
-        return this.repository.awardMoviesByRating() > 0 ? true : false;
+    public void awardMoviesByRating() {
+        this.movieRepository.awardMoviesByRating();
     }
 }

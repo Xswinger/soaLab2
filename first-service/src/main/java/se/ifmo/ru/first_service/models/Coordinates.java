@@ -14,9 +14,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Coordinates {
-    @Column(name = "coordinates_x", nullable = false)
+    @Column(name = "x", nullable = false)
     private Double x; //Поле не может быть null
 
-    @Column(name = "coordinates_y", nullable = false)
+    @Column(name = "y", nullable = false)
     private Double y; //Поле не может быть null
 }

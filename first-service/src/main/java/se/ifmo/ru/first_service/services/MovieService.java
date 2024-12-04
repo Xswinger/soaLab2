@@ -46,11 +46,11 @@ public interface MovieService {
 
     Movie updateMovie(@PathVariable Integer id, @RequestBody Movie movie);
 
-    boolean deleteMovie(@PathVariable Integer id);
+    void deleteMovie(@PathVariable Integer id);
 
-    boolean deleteMovieByRating(@RequestParam MpaaRating mpaaRating);
+    void deleteMovieByRating(@RequestParam MpaaRating mpaaRating);
 
-    boolean awardMoviesByRating();
+    void awardMoviesByRating();
 
     List<Movie> awardMoviesByOscarsAndDuration(@PathVariable int minLingth, @RequestParam long oscarsCount);
 }
