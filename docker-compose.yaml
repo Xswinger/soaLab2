@@ -1,39 +1,59 @@
 version: '3.8'
 
 services:
-  genocide-service:
+  first-service:
     build: ./first-service
     container_name: first-service
     networks:
-      - services-network 
+      - services-network
     depends_on:
-      - localhost
+      - db
     ports:
       - "8080:8080"
+      - "8443:8443"
 
-  # soa-service:
-  #   build: ./second-service
-  #   container_name: second-service
-  #   networks:
-  #     - services-network
-  #   # depends_on:
-  #   #   - main-db
-  #   ports:
-  #     - "9090:9090"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/soa
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
-  localhost:
-    image: postgres
+  db:
+    image: postgres:12
+    container_name: postgres-db
     build:
       context: ./
       dockerfile: Dockerfile.postgres
-    ports:
-      - "54323:54323"
+   # volumes:
+   #   - ./first-service/src/main/resources/sql/table.sql:/docker-entrypoint-initdb.d/test.sql
     environment:
-      - PGDATA=/var/lib/postgresql/data
-      - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=soa
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - services-network
 
 networks:
   services-network:
     driver: bridge
+
+
+
+
+
+    # soa-service:
+    #   build: ./second-service
+    #   container_name: second-service
+    #   networks:
+    #     - services-network
+    #   # depends_on:
+    #   #   - main-db
+    #   ports:
+    #     - "9090:9090"
