@@ -24,8 +24,7 @@ import se.ifmo.ru.second_service.models.Movie;
 public class MovieRestClient {
     
     private Client client;
-    private final String serviceUrl = "https://localhost:8080/first-service-0.0.1-SNAPSHOT";
-    // private final String serviceUrlTest = "https://localhost:41147";
+    private final String serviceUrl = "https://localhost:8443/first-service-0.0.1-SNAPSHOT";
 
     public Response addMoviesOscar() {
         String url = serviceUrl + "/movies/reward-r";

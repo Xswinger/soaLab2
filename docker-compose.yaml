@@ -12,11 +12,26 @@ services:
       - "8080:8080"
       - "8443:8443"
 
+
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/soa
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  soa-service:
+    build: ./second-service
+    container_name: second-service
+    networks:
+      - services-network
+    depends_on:
+      - db
+      - first-service
+
+    ports:
+      - "4040:4848"
+      - "4325:8080"
+      - "7171:8181"
 
   db:
     image: postgres:12
@@ -24,8 +39,8 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile.postgres
-   # volumes:
-   #   - ./first-service/src/main/resources/sql/table.sql:/docker-entrypoint-initdb.d/test.sql
+    #volumes:
+    #  - ./first-service/src/main/resources/sql/table.sql:/docker-entrypoint-initdb.d/test.sql
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
@@ -40,20 +55,8 @@ services:
     networks:
       - services-network
 
+
 networks:
   services-network:
     driver: bridge
 
-
-
-
-
-    # soa-service:
-    #   build: ./second-service
-    #   container_name: second-service
-    #   networks:
-    #     - services-network
-    #   # depends_on:
-    #   #   - main-db
-    #   ports:
-    #     - "9090:9090"
