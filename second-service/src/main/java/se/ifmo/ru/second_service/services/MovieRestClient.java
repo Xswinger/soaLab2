@@ -21,7 +21,7 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
-import jakarta.ws.rs.core.MediaType;x
+import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import se.ifmo.ru.second_service.models.Movie;
 
@@ -34,7 +34,12 @@ public class MovieRestClient {
     public Response addMoviesOscar() {
         String url = serviceUrl + "/movies/reward-r";
         try {
-            client = createClientWithTrustStore();
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, null, null);
+
+            Client client = ClientBuilder.newBuilder()
+                    .sslContext(sslContext)
+                    .build();
 
             Response response = client.target(url).request(MediaType.APPLICATION_JSON_TYPE).get();
 
@@ -51,7 +56,12 @@ public class MovieRestClient {
     public Response awardMoviesByOscarsAndDuration(int minLength, long oscarsCount) {
         String url = serviceUrl + "/movies/honor-by-length/" + minLength + "/oscars-to-add";
         try {
-            client = createClientWithTrustStore();
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, null, null);
+
+            Client client = ClientBuilder.newBuilder()
+                    .sslContext(sslContext)
+                    .build();
 
             Response response = client.target(url).queryParam("oscarsCount", oscarsCount).queryParam("minLength", minLength).request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(null, MediaType.APPLICATION_JSON));
 
@@ -62,14 +72,5 @@ public class MovieRestClient {
             System.out.println(ex.getMessage());
             return Response.status(500).build();
         }
-    }
-
-    private static Client createClientWithTrustStore() {
-        SSLContext sslContext = SSLContext.getInstance("TLS");
-        sslContext.init(null, null, null);
-
-        return ClientBuilder.newBuilder()
-                .sslContext(sslContext)
-                .build();
     }
 }
