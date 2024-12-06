@@ -1,0 +1,14 @@
+se\ifmo\ru\second_service\services\MovieRestClient.class
+se\ifmo\ru\second_service\models\Location$LocationBuilder.class
+se\ifmo\ru\second_service\SecondServiceApplication.class
+se\ifmo\ru\second_service\models\Coordinates$CoordinatesBuilder.class
+se\ifmo\ru\second_service\models\Location.class
+se\ifmo\ru\second_service\models\Movie.class
+se\ifmo\ru\second_service\controllers\MovieController.class
+se\ifmo\ru\second_service\models\Coordinates.class
+se\ifmo\ru\second_service\models\MpaaRating.class
+se\ifmo\ru\second_service\models\Person$PersonBuilder.class
+se\ifmo\ru\second_service\models\Movie$MovieBuilder.class
+se\ifmo\ru\second_service\models\Person.class
+se\ifmo\ru\second_service\services\MovieService.class
+se\ifmo\ru\second_service\controllers\MovieController$1.class
