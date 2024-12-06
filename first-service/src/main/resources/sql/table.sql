@@ -19,7 +19,7 @@ CREATE TABLE movie (
     x DOUBLE PRECISION NOT NULL,
     y DOUBLE PRECISION NOT NULL,
     creation_date TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), -- Автоматическая генерация даты
-    oscar_count INT NOT NULL CHECK (oscar_count > 0),
+    oscar_count INT CHECK (oscar_count > 0),
     length INT NOT NULL CHECK (length > 0),
     budget INT NOT NULL CHECK (budget > 0),
     total_box_office INT NOT NULL CHECK (total_box_office > 0),
