@@ -27,7 +27,7 @@
             maxThreads="150" SSLEnabled="true" scheme="https" secure="true"
             clientAuth="false" sslProtocol="TLS">
             <SSLHostConfig>
-                <Certificate certificateKeystoreFile="conf/keystore.p12"
+                <Certificate certificateKeystoreFile="conf/keystore.jks"
                     type="RSA"
                     certificateKeyAlias="first-service"
                     certificateKeystoreType="PKCS12"
