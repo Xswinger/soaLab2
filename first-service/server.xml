@@ -29,7 +29,7 @@
             <SSLHostConfig>
                 <Certificate certificateKeystoreFile="conf/keystore.p12"
                     type="RSA"
-                    certificateKeyAlias="alias"
+                    certificateKeyAlias="first-service"
                     certificateKeystoreType="PKCS12"
                     certificateKeystorePassword="password" 
                     certificateKeyPassword="password"
