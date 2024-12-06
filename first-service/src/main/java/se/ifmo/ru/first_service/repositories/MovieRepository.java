@@ -19,6 +19,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long>  {
 
     Page<Movie> findByIdOrNameOrCreationDateOrOscarCountOrLengthOrBudgetOrTotalBoxOfficeOrMpaaRating(Long id, String name, ZonedDateTime creationDate, Integer oscarCount, int length, int budget, int totalBoxOffice, MpaaRating mpaaRating, Pageable pageable);
 
+    @Query("SELECT m FROM Movie m WHERE m.oscarCount < :oscarCount")
     Page<Movie> findByOscarCount(Integer oscarCount, Pageable pageable);
 
     Page<Movie> findByName(String substr, Pageable pageable);

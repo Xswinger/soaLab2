@@ -21,7 +21,7 @@ import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
-import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.MediaType;x
 import jakarta.ws.rs.core.Response;
 import se.ifmo.ru.second_service.models.Movie;
 
@@ -34,16 +34,7 @@ public class MovieRestClient {
     public Response addMoviesOscar() {
         String url = serviceUrl + "/movies/reward-r";
         try {
-            // client = createClientWithTrustStore();
-
-            // Создаем SSL-клиент
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, null, null);
-
-            // Настройка клиента
-            Client client = ClientBuilder.newBuilder()
-                    .sslContext(sslContext)
-                    .build();
+            client = createClientWithTrustStore();
 
             Response response = client.target(url).request(MediaType.APPLICATION_JSON_TYPE).get();
 
@@ -53,7 +44,7 @@ public class MovieRestClient {
 
         } catch(Exception ex) {
             System.out.println(ex.getMessage());
-            return Response.ok(ex.getMessage()).build();
+            return Response.status(500).build();
         }
     }
 
@@ -69,35 +60,16 @@ public class MovieRestClient {
             return response;
         } catch(Exception ex) {
             System.out.println(ex.getMessage());
-            return null;
+            return Response.status(500).build();
         }
     }
 
     private static Client createClientWithTrustStore() {
-        String keystorePath = "keystore.p12";
-        String keystorePassword = "password";
+        SSLContext sslContext = SSLContext.getInstance("TLS");
+        sslContext.init(null, null, null);
 
-        try {
-            KeyStore keyStore = KeyStore.getInstance("PKCS12");
-
-            InputStream keyStoreFileInputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(keystorePath);
-            keyStore.load(keyStoreFileInputStream, keystorePassword.toCharArray());
-            
-            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
-            trustManagerFactory.init(keyStore);
-
-            KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
-            keyManagerFactory.init(keyStore, keystorePassword.toCharArray());
-
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(keyManagerFactory.getKeyManagers(), trustManagerFactory.getTrustManagers(), null);
-
-            return ClientBuilder.newBuilder()
-                    .sslContext(sslContext)
-                    .build();
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Ошибка настройки SSL клиента", e);
-        }
+        return ClientBuilder.newBuilder()
+                .sslContext(sslContext)
+                .build();
     }
 }
