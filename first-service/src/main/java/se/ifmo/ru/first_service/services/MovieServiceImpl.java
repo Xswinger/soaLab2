@@ -104,7 +104,7 @@ public class MovieServiceImpl implements MovieService {
         Pageable pagingSort = PageRequest.of(page, pageSize, Sort.by(orders));
         Page<Movie> moviePages;
 
-        moviePages = movieRepository.findByOscarCount(oscarsCount, pagingSort);
+        moviePages = movieRepository.getByOscarCount(oscarsCount, pagingSort);
 
         movies = moviePages.getContent();
 
