@@ -1,11 +1,9 @@
 package se.ifmo.ru.second_service.services;
 
-import java.util.List;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
-import se.ifmo.ru.second_service.models.Movie;
 
 @ApplicationScoped
 public class MovieService {

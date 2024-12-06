@@ -15,27 +15,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import jakarta.transaction.Transactional;
 import se.ifmo.ru.first_service.dto.MovieResponseArray;
 import se.ifmo.ru.first_service.models.Movie;
 import se.ifmo.ru.first_service.models.MpaaRating;
-// import se.ifmo.ru.first_service.repositories.CoordinatesRepository;
-// import se.ifmo.ru.first_service.repositories.LocationRepository;
 import se.ifmo.ru.first_service.repositories.MovieRepository;
 
 @Service
 public class MovieServiceImpl implements MovieService {
 
     private final MovieRepository movieRepository;
-    // private final LocationRepository locationRepository;
-    // private final CoordinatesRepository coordinatesRepository;
-
-    // @Autowired
-    // public MovieServiceImpl(MovieRepository movieRepository, LocationRepository locationRepository, CoordinatesRepository coordinatesRepository) {
-    //     this.movieRepository = movieRepository;
-    //     this.locationRepository = locationRepository;
-    //     this.coordinatesRepository = coordinatesRepository;
-    // }
 
     @Autowired
     public MovieServiceImpl(MovieRepository movieRepository) {
@@ -141,17 +129,11 @@ public class MovieServiceImpl implements MovieService {
         return response;
     }
 
-    // @Transactional
     public Movie addMovie(@RequestBody Movie movie) {
-        // this.coordinatesRepository.save(movie.getCoordinates());
-        // this.locationRepository.save(movie.getDirector().getLocation());
         return this.movieRepository.save(movie);
     }
 
-    // @Transactional
     public Movie updateMovie(@PathVariable Integer id, @RequestBody Movie movie) {
-        // this.coordinatesRepository.save(movie.getCoordinates());
-        // this.locationRepository.save(movie.getDirector().getLocation());
         return this.movieRepository.save(movie);
     }
 
