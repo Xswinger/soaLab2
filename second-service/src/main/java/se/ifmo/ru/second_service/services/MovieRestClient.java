@@ -3,18 +3,23 @@ package se.ifmo.ru.second_service.services;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.security.KeyStore;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.List;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.WebTarget;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -24,12 +29,21 @@ import se.ifmo.ru.second_service.models.Movie;
 public class MovieRestClient {
     
     private Client client;
-    private final String serviceUrl = "https://localhost:8443/first-service-0.0.1-SNAPSHOT";
+    private final String serviceUrl = "https://first-service:8443/first-service-0.0.1-SNAPSHOT";
 
     public Response addMoviesOscar() {
         String url = serviceUrl + "/movies/reward-r";
         try {
-            client = createClientWithTrustStore();
+            // client = createClientWithTrustStore();
+
+            // Создаем SSL-клиент
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, null, null);
+
+            // Настройка клиента
+            Client client = ClientBuilder.newBuilder()
+                    .sslContext(sslContext)
+                    .build();
 
             Response response = client.target(url).request(MediaType.APPLICATION_JSON_TYPE).get();
 
@@ -39,7 +53,7 @@ public class MovieRestClient {
 
         } catch(Exception ex) {
             System.out.println(ex.getMessage());
-            return null;
+            return Response.ok(ex.getMessage()).build();
         }
     }
 
