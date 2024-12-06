@@ -32,11 +32,6 @@ public class MovieController {
     public Response addMoviesOscar() {
         Response response = this.service.addMoviesOscar();
         return Response.status(response.getStatus())
-            // .header("Access-Control-Allow-Origin", "*")
-            // .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-            // .header("Access-Control-Allow-Credentials", "true")
-            // .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-            // .header("Access-Control-Max-Age", "1209600")
             .entity(response.getEntity()).build();
     }
 
@@ -46,19 +41,9 @@ public class MovieController {
         Response response = this.service.awardMoviesByOscarsAndDuration(minLength, oscarsCount);
         if (response.getStatus() == 200) {
             return Response.status(response.getStatus())
-                // .header("Access-Control-Allow-Origin", "*")
-                // .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                // .header("Access-Control-Allow-Credentials", "true")
-                // .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-                // .header("Access-Control-Max-Age", "1209600")
                 .entity(response.readEntity(new GenericType<List<Movie>>() {})).build();    
         } else {
             return Response.status(response.getStatus())
-                // .header("Access-Control-Allow-Origin", "*")
-                // .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
-                // .header("Access-Control-Allow-Credentials", "true")
-                // .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-                // .header("Access-Control-Max-Age", "1209600")
                 .entity(response.getEntity()).build();
         }
     }

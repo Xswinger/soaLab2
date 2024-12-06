@@ -27,8 +27,6 @@ import se.ifmo.ru.second_service.models.Movie;
 
 @ApplicationScoped
 public class MovieRestClient {
-    
-    private Client client;
     private final String serviceUrl = "https://first-service:8443/first-service-0.0.1-SNAPSHOT";
 
     public Response addMoviesOscar() {
