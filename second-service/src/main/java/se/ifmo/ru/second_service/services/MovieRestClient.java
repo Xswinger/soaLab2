@@ -63,7 +63,7 @@ public class MovieRestClient {
 
             Response response = client.target(url).queryParam("oscarsCount", oscarsCount).queryParam("minLength", minLength).request(MediaType.APPLICATION_JSON_TYPE).post(Entity.entity(null, MediaType.APPLICATION_JSON));
 
-            // client.close();
+            client.close();
 
             return response;
         } catch(Exception ex) {
