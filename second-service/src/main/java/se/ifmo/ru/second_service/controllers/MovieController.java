@@ -3,8 +3,6 @@ package se.ifmo.ru.second_service.controllers;
 
 import java.util.List;
 
-import javax.net.ssl.TrustManagerFactory;
-
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
