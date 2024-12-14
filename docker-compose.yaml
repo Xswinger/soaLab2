@@ -11,8 +11,6 @@ services:
     ports:
       - "8080:8080"
       - "8443:8443"
-    volumes:
-      - ./first-service/src/main/resources/keystore/keystore.p12:/usr/local/tomcat/conf/keystore.p12
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/soa
       - SPRING_DATASOURCE_USERNAME=postgres
