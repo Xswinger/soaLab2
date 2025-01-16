@@ -1,0 +1,19 @@
+{
+    "services": [{
+        "name": "first-service-first-instance",
+        "address": "10.5.0.5",
+        "port": 8080
+    }, {
+        "name": "first-service-second-instance",
+        "address": "10.5.0.6",
+        "port": 8080
+    }, {
+        "name": "second-service-first-instance",
+        "address": "10.5.0.7",
+        "port": 8080
+    }, {
+        "name": "second-service-second-instance",
+        "address": "10.5.0.8",
+        "port": 8080
+    }]
+}

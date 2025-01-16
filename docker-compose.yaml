@@ -1,9 +1,11 @@
 services:
-  first-service:
+
+  first-service-first-instance:
     build: ./first-service
-    container_name: first-service
+    container_name: first-service-first-instance
     networks:
-      - services-network
+      services-network:
+        ipv4_address: 10.5.0.5
     depends_on:
       - db
     ports:
@@ -15,19 +17,54 @@ services:
       - SPRING_DATASOURCE_PASSWORD=postgres
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
 
-  second-service:
-    build: ./second-service
-    container_name: second-service
+  first-service-second-instance:
+    build: ./first-service
+    container_name: first-service-second-instance
     networks:
-      - services-network
+      services-network:
+        ipv4_address: 10.5.0.6
     depends_on:
       - db
-      - first-service
+    ports:
+      - "8081:8080"
+      - "8444:8443"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/soa
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=postgres
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+  second-service-first-instance:
+    build: ./second-service
+    container_name: second-service-first-instance
+    networks:
+      services-network:
+        ipv4_address: 10.5.0.7
+    depends_on:
+      - db
+      - first-service-first-instance
+      - first-service-second-instance
 
     ports:
       - "4040:4848"
       - "4325:8080"
       - "7171:8181"
+
+  second-service-second-instance:
+    build: ./second-service
+    container_name: second-service-second-instance
+    networks:
+      services-network:
+        ipv4_address: 10.5.0.8
+    depends_on:
+      - db
+      - first-service-first-instance
+      - first-service-second-instance
+
+    ports:
+      - "4041:4848"
+      - "4326:8080"
+      - "7172:8181"
 
   db:
     image: postgres:12
@@ -49,8 +86,41 @@ services:
     networks:
       - services-network
 
+  services-balancer:
+    image: haproxy:latest
+    container_name: balancer
+    ports:
+      - "4500:4500"
+      - "4600:4600"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+      # - ./first-service/first-service.pem:/usr/local/etc/haproxy/first-service.pem:ro
+      # - ./second-service/second-service.pem:/usr/local/etc/haproxy/second-service.pem:ro
+    networks:
+      - services-network
+    depends_on:
+      - db
+      - first-service-first-instance
+      - first-service-second-instance
+      - second-service-first-instance
+      - second-service-second-instance
+
+  service-discovery:
+    container_name: service-discovery
+    image: consul:1.15.4
+    command: agent -dev -client=0.0.0.0 -config-file=/consul/config/services.json
+    volumes:
+      - ./services.json:/consul/config/services.json
+    networks:
+      - services-network
+    ports:
+      - "10551:8500"
+      - "10651:8600"
 
 networks:
   services-network:
     driver: bridge
-
+    ipam:
+      config: 
+        - subnet: 10.5.0.0/20
+          gateway: 10.5.0.1
