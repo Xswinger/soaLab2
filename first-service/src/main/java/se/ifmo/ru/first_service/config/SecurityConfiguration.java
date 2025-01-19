@@ -13,8 +13,8 @@ public class SecurityConfiguration {
         return http.csrf().disable()
         // .requiresChannel(channel -> 
         //     channel.anyRequest()
-            // .requiresSecure()
-            // )
+        //     .requiresSecure()
+        //     )
         // .authorizeRequests(authorize ->
         //     authorize.anyRequest().permitAll())
         .build();

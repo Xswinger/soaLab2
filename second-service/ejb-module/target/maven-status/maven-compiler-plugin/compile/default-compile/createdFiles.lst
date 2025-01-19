@@ -8,6 +8,5 @@ se\ifmo\ru\models\Location$LocationBuilder.class
 se\ifmo\ru\models\Movie.class
 se\ifmo\ru\services\MovieRestClient.class
 se\ifmo\ru\models\Person.class
-se\ifmo\ru\services\MovieServiceImpl.class
 se\ifmo\ru\App.class
 se\ifmo\ru\models\Person$PersonBuilder.class

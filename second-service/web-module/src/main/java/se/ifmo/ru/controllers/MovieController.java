@@ -1,8 +1,5 @@
 package se.ifmo.ru.controllers;
 
-
-import java.util.List;
-
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -11,10 +8,8 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
-import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import se.ifmo.ru.models.Movie;
 import se.ifmo.ru.services.RemoteService;
 
 @Path("/movies")
@@ -28,21 +23,14 @@ public class MovieController {
     @GET
     @Path("/reward-r")
     public Response addMoviesOscar() {
-        // Response response = this.service.addMoviesOscar();
-        return Response.status(200)
-            .entity(this.service.addMoviesOscar()).build();
+        Integer status = this.service.addMoviesOscar();
+        return Response.status(status).build();
     }
 
     @POST
     @Path("/honor-by-length/{min-length}/oscars-to-add")
     public Response awardMoviesByOscarsAndDuration(@PathParam("min-length") int minLength, @QueryParam("oscarsCount") long oscarsCount) {
-        Response response = this.service.awardMoviesByOscarsAndDuration(minLength, oscarsCount);
-        if (response.getStatus() == 200) {
-            return Response.status(response.getStatus())
-                .entity(response.readEntity(new GenericType<List<Movie>>() {})).build();    
-        } else {
-            return Response.status(response.getStatus())
-                .entity(response.getEntity()).build();
-        }
+        Integer status = this.service.awardMoviesByOscarsAndDuration(minLength, oscarsCount);
+        return Response.status(status).build();
     }
 }

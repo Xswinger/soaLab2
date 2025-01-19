@@ -47,8 +47,8 @@ services:
 
     ports:
       - "4040:4848"
-      - "4325:8080"
-      - "7171:8181"
+      - "4325:8081"
+      - "7171:8443"
 
   second-service-second-instance:
     build: ./second-service
@@ -63,8 +63,8 @@ services:
 
     ports:
       - "4041:4848"
-      - "4326:8080"
-      - "7172:8181"
+      - "4326:8081"
+      - "7172:8443"
 
   db:
     image: postgres:12
@@ -94,8 +94,8 @@ services:
       - "4600:4600"
     volumes:
       - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
-      # - ./first-service/first-service.pem:/usr/local/etc/haproxy/first-service.pem:ro
-      # - ./second-service/second-service.pem:/usr/local/etc/haproxy/second-service.pem:ro
+      - ./deploy/first-service.pem:/usr/local/etc/haproxy/first-service.pem:ro
+      - ./deploy/second-service.pem:/usr/local/etc/haproxy/second-service.pem:ro
     networks:
       - services-network
     depends_on:

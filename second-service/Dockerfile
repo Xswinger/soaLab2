@@ -1,14 +1,15 @@
-FROM payara/server-full
+FROM quay.io/wildfly/wildfly:33.0.2.Final-jdk21
 
-WORKDIR /opt/payara/deployments
+COPY standalone.xml /opt/jboss/wildfly/standalone/configuration/
 
-COPY ejb-module/target/ejb-module-1.0-SNAPSHOT.jar /opt/payara/deployments
-COPY web-module/target/web-module-1.0-SNAPSHOT.war /opt/payara/deployments
+COPY deploy/second-service.jks /opt/jboss/wildfly/standalone/configuration/
+COPY deploy/first-service.crt first-service.crt
+COPY deploy/second-service.crt second-service.crt
 
-# COPY web-module/src/main/resources/keystore.jks /opt/payara/appserver/glassfish/domains/domain1/config
+USER root
+RUN keytool -importcert -keystore $JAVA_HOME/lib/security/cacerts -storepass password -alias second-service -trustcacerts -file second-service.crt -noprompt
+RUN keytool -importcert -keystore $JAVA_HOME/lib/security/cacerts -storepass password -alias first-service -trustcacerts -file first-service.crt -noprompt
+USER jboss
 
-# COPY web-module/src/main/resources/first-service.crt first-service.crt
-
-# USER root
-# RUN keytool -importcert -keystore /opt/payara/appserver/glassfish/domains/domain1/config/cacerts.p12 -storepass changeit -alias first-service -trustcacerts -file first-service.crt -noprompt
-# USER payara
+COPY ejb-module/target/ejb-module-1.0-SNAPSHOT.jar /opt/jboss/wildfly/standalone/deployments/ejb-module-1.0-SNAPSHOT.jar
+COPY web-module/target/web-module-1.0-SNAPSHOT.war /opt/jboss/wildfly/standalone/deployments/web-module-1.0-SNAPSHOT.war
