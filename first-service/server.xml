@@ -19,8 +19,9 @@
     <Service name="Catalina">
         <!-- HTTP Connector -->
         <Connector port="8080" protocol="HTTP/1.1"
-            connectionTimeout="20000"
-            redirectPort="8443" />
+            connectionTimeout="20000" 
+            />
+            <!-- redirectPort="8443" -->
 
         <!-- HTTPS Connector -->
         <Connector port="8443" protocol="org.apache.coyote.http11.Http11NioProtocol"

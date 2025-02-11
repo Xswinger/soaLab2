@@ -1,0 +1,5 @@
+se\ifmo\ru\rest_layer\controllers\MovieController.class
+se\ifmo\ru\rest_layer\client\MovieClient.class
+se\ifmo\ru\rest_layer\RestLayerApp.class
+se\ifmo\ru\rest_layer\services\MovieService.class
+se\ifmo\ru\rest_layer\ws\MovieServiceSoap.class

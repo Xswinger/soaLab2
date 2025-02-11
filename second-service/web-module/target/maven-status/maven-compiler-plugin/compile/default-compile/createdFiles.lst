@@ -1,4 +1,4 @@
-se\ifmo\ru\controllers\MovieController$1.class
-se\ifmo\ru\controllers\MovieController.class
+se\ifmo\ru\controllers\MovieServiceSoap.class
+se\ifmo\ru\controllers\MovieServiceSoapImpl.class
 se\ifmo\ru\SecondServiceApplication.class
 se\ifmo\ru\services\RemoteService.class

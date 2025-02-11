@@ -11,7 +11,7 @@ import jakarta.ws.rs.core.Response;
 
 @ApplicationScoped
 public class MovieRestClient {
-    private final String serviceUrl = "https://10.5.0.1:4500/first-service-0.0.1-SNAPSHOT";
+    private final String serviceUrl = "http://10.5.0.9:8081";
 
     public Response addMoviesOscar() {
         String url = serviceUrl + "/movies/reward-r";
